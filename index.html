@@ -352,33 +352,20 @@ async function runAI(menu,u){
   if(phase!=='welcome') addMsg('ai','<strong>'+menu.icon+' '+menu.label+'</strong> 분석을 시작합니다…');
   let result='';
   try{
-    const API_KEY = window.ANTHROPIC_KEY || sessionStorage.getItem('AKEY') || '';
-    if(!API_KEY){
-      document.getElementById('ld-ov').classList.remove('show');
-      document.getElementById('apikey-bar').style.display='flex';
-      addMsg('ai','⚠️ <strong>API 키를 먼저 입력해 주세요!</strong><br>화면 하단 입력창에 <strong>sk-ant-...</strong> 키를 입력하고 저장 버튼을 누르세요.');
-      return;
-    }
-    const proxyUrl = 'https://api.anthropic.com/v1/messages';
-    const res = await fetch(proxyUrl,{
+    const res = await fetch('/api/chat',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{role:'user',content:menu.prompt(u)}]
-      })
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:menu.prompt(u)})
     });
-    const data = await res.json();
-    if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
-    result = data.content?.[0]?.text || '결과를 가져오지 못했습니다.';
+    if(!res.ok){
+      const err=await res.json().catch(()=>({error:'서버 응답 오류 ('+res.status+')'}));
+      throw new Error(err.error||'서버 오류 '+res.status);
+    }
+    const data=await res.json();
+    if(!data.result) throw new Error('응답 데이터가 비어있습니다');
+    result=data.result;
   }catch(e){
-    result = '오류: '+e.message+'\n\n💡 해결방법:\n1. API 키가 올바른지 확인\n2. Vercel 배포 버전을 사용하세요\n📞 02-762-3009';
+    result='오류: '+e.message+'\n\n📞 02-762-3009 세명장교 비즈니스센터';
   }
   document.getElementById('ld-ov').classList.remove('show');
   showResult(menu,result);
