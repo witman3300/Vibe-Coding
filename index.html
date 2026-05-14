@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>사업하자 — AI 창업 플랫폼 | 세명장교 비즈니스센터</title>
+<meta name="description" content="사주 분석으로 창업 운세부터 홈페이지 자동 생성까지! 세명장교 비즈니스센터 AI 창업 플랫폼">
+<meta property="og:title" content="사업하자 — AI 창업 플랫폼">
+<meta property="og:description" content="13고개 질문으로 내 사업 홈페이지 자동 완성!">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--ink:#0C0A08;--gold:#B8860B;--gold2:#D4A017;--glt:#F5E6B8;--gdim:rgba(184,134,11,.1);
+  --paper:#F8F4ED;--p2:#F2EDE3;--p3:#E8E0CE;--red:#8B1A1A;--blue:#1A3A5C;
+  --text:#2A2218;--muted:#7A6A50;--bd:#D4C9B0;}
+html,body{height:100%;font-family:'Noto Sans KR',sans-serif;background:var(--paper);overflow:hidden;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,80%,100%{transform:scale(.8);opacity:.5}40%{transform:scale(1.2);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes hookGlow{0%,100%{text-shadow:0 0 20px rgba(255,200,50,.6)}50%{text-shadow:0 0 50px rgba(255,220,80,1),0 0 90px rgba(255,180,30,.5)}}
+@keyframes hookPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,160,23,.5),0 4px 24px rgba(184,134,11,.3)}60%{box-shadow:0 0 0 14px rgba(212,160,23,0),0 4px 24px rgba(184,134,11,.3)}}
+@keyframes bFlash{0%,100%{border-color:#D4A017}50%{border-color:#FFE566}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+#app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+#topnav{display:flex;align-items:stretch;background:var(--ink);border-bottom:2px solid var(--gold);flex-shrink:0;position:relative;z-index:60;}
+.tn-logo{display:flex;align-items:center;gap:8px;padding:0 14px;border-right:1px solid #2A2218;cursor:pointer;min-height:44px;transition:background .18s;flex-shrink:0;}
+.tn-logo:hover{background:rgba(184,134,11,.12);}
+.tn-logo-txt{font-family:'Noto Serif KR',serif;font-size:13px;font-weight:900;background:linear-gradient(135deg,var(--glt),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.tn-menus{display:flex;flex:1;overflow-x:auto;scrollbar-width:none;}
+.tn-menus::-webkit-scrollbar{display:none;}
+.tn-item{display:flex;align-items:center;gap:4px;padding:0 11px;font-size:10px;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;color:#C0B090;white-space:nowrap;min-height:44px;transition:all .18s;border-right:1px solid #1A1612;}
+.tn-item:hover{background:rgba(255,255,255,.04);color:var(--glt);}
+.tn-item.on{border-bottom-color:var(--gold);color:var(--gold2);background:rgba(184,134,11,.1);}
+.tn-right{display:flex;align-items:center;padding:0 12px;border-left:1px solid #1A1612;}
+.tn-btn{padding:5px 10px;border-radius:14px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid #3A3020;background:transparent;color:#C0B090;}
+#dd{position:absolute;top:100%;left:0;right:0;background:#fff;border-bottom:2px solid var(--gold);box-shadow:0 8px 24px rgba(0,0,0,.15);max-height:55vh;overflow-y:auto;z-index:59;display:none;}
+#dd.show{display:block;}
+.dd-hd{padding:10px 18px 8px;border-bottom:1px solid var(--bd);font-family:'Noto Serif KR',serif;font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;background:var(--p2);}
+.dd-badge{width:21px;height:21px;border-radius:50%;color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dd-grid{display:grid;}.dd-card{padding:13px 12px;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);cursor:pointer;transition:background .15s;}
+.dd-card:hover{background:var(--gdim);}
+.dd-ct{font-size:11px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.dd-cd{font-size:10px;color:var(--muted);line-height:1.4;}
+.dd-rm{padding:10px 14px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;}
+.dd-rmi{padding:8px 6px;text-align:center;}
+.dd-rmn{width:22px;height:22px;border-radius:50%;color:#fff;font-weight:900;font-size:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px;}
+.dd-rmi span{font-size:9px;color:var(--ink);font-weight:700;line-height:1.3;}
+.dd-ck{padding:10px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.ck-gt{font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:5px;}
+.ck-i{display:flex;align-items:center;gap:7px;padding:5px 7px;margin-bottom:4px;background:var(--paper);border:1px solid var(--bd);border-radius:7px;cursor:pointer;}
+.ck-i.done{background:#F5FFF8;border-color:rgba(26,74,42,.3);}
+.ck-cb{width:13px;height:13px;border-radius:3px;border:1.5px solid var(--bd);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;}
+.ck-i.done .ck-cb{background:#4CAF7D;border-color:#4CAF7D;}
+.ck-i span{font-size:10px;color:var(--text);}
+.ck-i.done span{text-decoration:line-through;color:var(--muted);}
+.ck-prog{grid-column:1/-1;padding-top:6px;border-top:1px solid var(--bd);}
+#body{display:flex;flex:1;overflow:hidden;}
+#sb{width:222px;flex-shrink:0;background:var(--ink);display:flex;flex-direction:column;border-right:2px solid var(--gold);overflow-y:auto;}
+.sb-hd{padding:14px 13px 10px;border-bottom:1px solid #1E1A14;}
+.sb-logo{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;background:linear-gradient(135deg,var(--glt),var(--gold) 60%,#7A5C00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.3;margin-bottom:3px;}
+.sb-sub{font-size:8px;letter-spacing:2px;color:#3A3020;text-transform:uppercase;}
+.sb-helper{margin:9px 10px 3px;padding:10px 12px;background:rgba(184,134,11,.1);border:1px solid rgba(184,134,11,.3);border-radius:9px;}
+.sb-ht{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.sb-ht .icon{font-size:14px;}.sb-ht .txt{font-family:'Noto Serif KR',serif;font-size:12px;font-weight:900;color:var(--gold2);}
+.sb-hb{font-size:9px;color:#C0A870;line-height:1.7;}
+.sb-saved{font-size:9px;color:var(--gold2);font-weight:700;margin-top:5px;padding-top:5px;border-top:1px solid rgba(184,134,11,.2);display:none;}
+.sb-sec{font-size:8px;letter-spacing:2px;color:#C0B090;text-transform:uppercase;padding:8px 13px 3px;}
+.sb-mi{display:flex;align-items:center;gap:9px;padding:9px 13px;cursor:pointer;border-left:2px solid transparent;transition:all .17s;}
+.sb-mi:hover{background:rgba(255,255,255,.05);}
+.sb-mi.on{background:rgba(184,134,11,.12);border-left-color:var(--gold);}
+.sb-icon{font-size:14px;flex-shrink:0;width:19px;text-align:center;}
+.sb-label{font-size:10px;font-weight:700;color:#FFF;line-height:1.3;}
+.sb-slabel{font-size:8px;color:#B0A890;line-height:1.3;margin-top:1px;}
+.sb-mi.on .sb-slabel{color:#C0A060;}
+.sb-price{margin:8px 10px;padding:9px 12px;background:linear-gradient(135deg,#1A1400,#0C0900);border:1px solid var(--gold);border-radius:9px;text-align:center;}
+.sb-pa{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;color:var(--gold2);}
+.sb-pl{font-size:8px;color:#5A4A2A;margin-top:2px;}
+.sb-ft{padding:8px 12px;border-top:1px solid #1E1A14;font-size:9px;color:#B0A090;line-height:1.9;}
+.sb-ft a{color:var(--gold);text-decoration:none;font-size:10px;}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+#welcome{flex:1;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px 18px;text-align:center;background:linear-gradient(160deg,#0C0A08 0%,#1A1208 50%,#0A0800 100%);}
+.wl-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--gold);color:var(--gold);font-size:8px;letter-spacing:3px;padding:5px 14px;border-radius:18px;margin-bottom:12px;text-transform:uppercase;}
+.wl-title{font-family:'Noto Serif KR',serif;font-size:clamp(22px,3.5vw,34px);font-weight:900;color:#E8DEC8;line-height:1.2;margin-bottom:18px;}
+.wl-title span{color:var(--gold2);}
+.wl-flow{width:100%;max-width:510px;margin:0 auto 20px;}
+.wl-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-left:4px solid rgba(184,134,11,.4);background:rgba(255,255,255,.04);border-radius:0 10px 10px 0;margin-bottom:3px;}
+.wl-num{width:30px;height:30px;border-radius:50%;background:rgba(184,134,11,.25);border:1.5px solid var(--gold);color:var(--gold2);font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wl-txt{font-family:'Noto Sans KR',sans-serif;font-size:clamp(13px,1.9vw,17px);font-weight:700;color:#C8B880;text-align:left;flex:1;line-height:1.4;}
+.wl-txt em{color:var(--gold2);font-style:normal;font-weight:900;}
+.wl-arr{text-align:left;padding-left:48px;font-size:16px;color:rgba(184,134,11,.4);line-height:1;margin:2px 0;}
+.wl-hook{display:flex;align-items:center;gap:12px;padding:18px 20px;border-left:5px solid var(--gold2);background:rgba(212,160,23,.13);border-radius:0 14px 14px 0;animation:hookPulse 2.5s infinite,bFlash 2.5s ease-in-out infinite;}
+.wl-hook-num{width:40px;height:40px;border-radius:50%;background:var(--gold2);color:#0C0A08;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wl-hook-txt{text-align:left;flex:1;}
+.wl-hook-main{font-family:'Noto Sans KR',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:900;line-height:1.2;background:linear-gradient(135deg,#FFE566,#FFB800,#FF8C00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:hookGlow 2.5s ease-in-out infinite;}
+.wl-hook-sub{font-family:'Noto Sans KR',sans-serif;font-size:clamp(11px,1.6vw,14px);font-weight:700;color:rgba(255,220,100,.75);margin-top:4px;}
+.wl-start{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--gold),#7A5C00);color:#fff;padding:13px 34px;border-radius:28px;font-size:15px;font-weight:900;font-family:'Noto Sans KR',sans-serif;cursor:pointer;border:none;box-shadow:0 5px 20px rgba(184,134,11,.45);margin-bottom:14px;transition:all .2s;}
+.wl-start:hover{opacity:.9;transform:translateY(-2px);}
+.wl-tags{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;}
+.wl-tag{padding:3px 8px;border-radius:11px;font-size:8px;background:rgba(184,134,11,.1);border:1px solid rgba(184,134,11,.25);color:#C0A870;}
+#chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;display:none;}
+#chat-body{flex:1;overflow-y:auto;padding:18px 22px 10px;display:flex;flex-direction:column;gap:10px;}
+.msg{display:flex;gap:10px;animation:fadeUp .3s ease;}
+.msg.user{flex-direction:row-reverse;}
+.av{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.av.ai{background:linear-gradient(135deg,var(--gold),#7A5C00);color:#fff;font-size:9px;font-weight:900;font-family:'Noto Serif KR',serif;}
+.av.usr{background:var(--p3);border:1px solid var(--bd);font-size:14px;}
+.bubble{max-width:76%;padding:10px 15px;border-radius:13px;font-size:12px;line-height:1.9;}
+.msg.ai .bubble{background:#fff;border:1px solid var(--bd);box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.msg.user .bubble{background:var(--gdim);border:1px solid rgba(184,134,11,.2);}
+.typing-wrap{display:flex;gap:10px;align-items:flex-start;}
+.t-dots{padding:10px 15px;background:#fff;border:1px solid var(--bd);border-radius:13px;display:flex;gap:4px;}
+.td{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.3;animation:bounce 1.2s infinite;}
+.td:nth-child(2){animation-delay:.18s;}.td:nth-child(3){animation-delay:.36s;}
+#iz{padding:10px 16px 12px;border-top:1px solid var(--bd);background:var(--p2);flex-shrink:0;}
+.iz-hint{font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.iz-hint::before{content:'';width:11px;height:1px;background:var(--gold);}
+.inp-row{display:flex;gap:6px;background:#fff;border:1.5px solid var(--bd);border-radius:34px;padding:3px 5px 3px 15px;transition:border-color .2s;}
+.inp-row:focus-within{border-color:var(--gold);}
+#ci{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px;font-family:'Noto Sans KR',sans-serif;resize:none;height:22px;max-height:88px;line-height:1.6;padding-top:1px;overflow:hidden;}
+#ci:disabled{opacity:.4;}
+.send-btn{background:linear-gradient(135deg,var(--gold),#7A5C00);border:none;border-radius:26px;width:32px;height:32px;flex-shrink:0;cursor:pointer;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.send-btn:disabled{background:#ccc;cursor:default;}
+.inp-note{font-size:9px;color:var(--muted);margin-top:4px;text-align:center;}
+#mf-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:14px;}
+#mf-ov.show{display:flex;}
+#mf-box{background:#fff;border-radius:13px;max-width:370px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:fadeUp .2s ease;}
+.mf-hd{padding:14px 17px;display:flex;align-items:center;gap:8px;}
+.mf-title{font-family:'Noto Serif KR',serif;font-size:13px;font-weight:700;color:#E8DEC8;flex:1;}
+.mf-close{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;color:#C0B090;font-size:12px;display:flex;align-items:center;justify-content:center;}
+.mf-body{padding:16px 17px 15px;}
+.mf-field{margin-bottom:10px;}
+.mf-label{display:block;font-size:9px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
+.mf-input{width:100%;padding:8px 10px;border:1.5px solid var(--bd);border-radius:8px;font-size:12px;font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--text);outline:none;}
+.mf-input:focus{border-color:var(--gold);}
+.mf-submit{width:100%;padding:10px;background:linear-gradient(135deg,var(--gold),#7A5C00);border:none;border-radius:9px;color:#fff;font-size:13px;font-weight:700;font-family:'Noto Serif KR',serif;cursor:pointer;margin-top:3px;}
+.mf-note{text-align:center;font-size:9px;color:var(--muted);margin-top:7px;line-height:1.5;}
+#res-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:14px;}
+#res-ov.show{display:flex;}
+#res-box{background:#fff;border-radius:13px;max-width:550px;width:100%;max-height:82vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:fadeUp .2s ease;}
+.res-hd{padding:16px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:1;}
+.res-icon{font-size:20px;}.res-title{font-family:'Noto Serif KR',serif;font-size:13px;font-weight:700;color:#E8DEC8;flex:1;}
+.res-sub{font-size:9px;color:#9A8A6A;margin-top:1px;}
+.res-close{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;color:#E8DEC8;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.res-body{padding:18px 20px;font-size:13px;line-height:2;color:var(--text);white-space:pre-wrap;}
+.res-ft{padding:0 20px 16px;}
+.res-web{width:100%;padding:10px;background:linear-gradient(135deg,var(--gold),#7A5C00);border:none;border-radius:9px;color:#fff;font-size:13px;font-weight:700;font-family:'Noto Serif KR',serif;cursor:pointer;}
+#ld-ov{display:none;position:fixed;inset:0;background:rgba(12,10,8,.72);z-index:400;flex-direction:column;align-items:center;justify-content:center;gap:13px;}
+#ld-ov.show{display:flex;}
+.ld-sp{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);border-top-color:transparent;animation:spin 1s linear infinite;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.ld-t{color:#E8DEC8;font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;}
+.ld-s{color:#8A7A5A;font-size:11px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topnav">
+    <div class="tn-logo" onclick="resetHome()" title="처음 화면으로">
+      <span style="font-size:16px">🔮</span>
+      <span class="tn-logo-txt">사업하자</span>
+    </div>
+    <div class="tn-menus" id="tn-menus"></div>
+    <div class="tn-right"><button class="tn-btn" onclick="resetHome()">🔄 처음으로</button></div>
+    <div id="dd"></div>
+  </div>
+  <div id="body">
+    <div id="sb">
+      <div class="sb-hd"><div class="sb-logo">AI 창업 분석</div><div class="sb-sub">Saju Business Platform</div></div>
+      <div class="sb-helper">
+        <div class="sb-ht"><span class="icon">🤝</span><span class="txt">창업 도우미</span></div>
+        <div class="sb-hb">아래 메뉴를 클릭하면<br>이름·생년월일 입력 후<br>맞춤 AI 분석을 받아요!</div>
+        <div class="sb-saved" id="sb-saved"></div>
+      </div>
+      <div class="sb-sec">분석 메뉴 (11가지)</div>
+      <div id="sb-menus"></div>
+      <div class="sb-price"><div class="sb-pa">₩ 49,000</div><div class="sb-pl">49페이지 프리미엄 보고서</div></div>
+      <div class="sb-ft">세명장교 비즈니스센터<br><a href="tel:02-762-3009">📞 02-762-3009</a><br>서울 중구 삼일대로 363</div>
+    </div>
+    <div id="main">
+      <div id="welcome">
+        <div class="wl-badge">✦ AI 사주 분석 · 창업운세 플랫폼 ✦</div>
+        <div class="wl-title">사주로 보는 <span>창업의 운명</span></div>
+        <div class="wl-flow">
+          <div class="wl-row"><div class="wl-num">1</div><div class="wl-txt"><em>「사업하자」</em> 한 마디로 시작</div></div>
+          <div class="wl-arr">↓</div>
+          <div class="wl-row"><div class="wl-num">2</div><div class="wl-txt"><em>13고개 질문</em>으로 홈페이지 정보 수집</div></div>
+          <div class="wl-arr">↓</div>
+          <div class="wl-row"><div class="wl-num">3</div><div class="wl-txt"><em>11가지 맞춤 분석 도구</em> 활성화</div></div>
+          <div class="wl-arr">↓</div>
+          <div class="wl-hook">
+            <div class="wl-hook-num">🌐</div>
+            <div class="wl-hook-txt">
+              <div class="wl-hook-main">홈페이지 자동 생성까지!</div>
+              <div class="wl-hook-sub">사주 입력 한 번으로 내 사업 홈페이지 완성</div>
+            </div>
+          </div>
+        </div>
+        <button class="wl-start" onclick="startChat()">🔮 지금 시작하기 →</button>
+        <div class="wl-tags" id="wl-tags"></div>
+      </div>
+      <div id="chat-wrap">
+        <div id="chat-body"></div>
+        <div id="iz">
+          <div class="iz-hint" id="iz-hint">「사업하자」라고 입력해 주세요</div>
+          <div class="inp-row">
+            <textarea id="ci" placeholder="「사업하자」라고 입력해 보세요…" rows="1"
+              oninput="autoR(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+            <button class="send-btn" id="sbtn" onclick="send()">➤</button>
+          </div>
+          <div class="inp-note">Enter 전송 · Shift+Enter 줄바꿈</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="mf-ov" onclick="if(event.target===this)this.classList.remove('show')">
+  <div id="mf-box">
+    <div class="mf-hd" style="background:linear-gradient(135deg,#0C0A08,#1A1208)">
+      <span id="mf-icon" style="font-size:19px">📛</span>
+      <div><div class="mf-title" id="mf-title">작명 · 회사명 추천</div><div style="font-size:9px;color:#8A7A5A;margin-top:1px">정보 입력 후 AI 분석 시작</div></div>
+      <button class="mf-close" onclick="document.getElementById('mf-ov').classList.remove('show')">✕</button>
+    </div>
+    <div class="mf-body">
+      <div class="mf-field"><label class="mf-label">성명 *</label><input class="mf-input" id="mf-name" placeholder="예) 홍길동" type="text"></div>
+      <div class="mf-field"><label class="mf-label">생년월일 * (양력)</label><input class="mf-input" id="mf-birth" placeholder="예) 1963-11-15" type="text"></div>
+      <div class="mf-field"><label class="mf-label">태어난 시간</label><input class="mf-input" id="mf-hour" placeholder="예) 오전 10시, 모름" type="text" value="모름"></div>
+      <div class="mf-field"><label class="mf-label">성별</label><select class="mf-input" id="mf-gender"><option value="남">남성</option><option value="여">여성</option></select></div>
+      <button class="mf-submit" onclick="submitMF()">분석 시작하기</button>
+      <div class="mf-note">입력 정보는 다음 메뉴 클릭 시 자동으로 사용됩니다</div>
+    </div>
+  </div>
+</div>
+<div id="res-ov" onclick="if(event.target===this)this.classList.remove('show')">
+  <div id="res-box">
+    <div class="res-hd" style="background:linear-gradient(135deg,#0C0A08,#1A1208)">
+      <span class="res-icon" id="res-icon">📛</span>
+      <div><div class="res-title" id="res-title"></div><div class="res-sub" id="res-sub"></div></div>
+      <button class="res-close" onclick="document.getElementById('res-ov').classList.remove('show')">✕</button>
+    </div>
+    <div class="res-body" id="res-body"></div>
+    <div class="res-ft" id="res-ft"></div>
+  </div>
+</div>
+<div id="ld-ov">
+  <div class="ld-sp">🔮</div>
+  <div class="ld-t">AI가 분석 중입니다…</div>
+  <div class="ld-s" id="ld-s">사주와 정보를 기반으로 결과를 생성하고 있습니다</div>
+</div>
+<script>
+const GOLD='#B8860B',GOLD2='#D4A017',P2='#F2EDE3',BD='#D4C9B0',MUTED='#7A6A50',RED='#8B1A1A',BLUE='#1A3A5C';
+const SB_MENUS=[
+  {id:'name',icon:'📛',label:'작명 · 회사명 추천',sub:'사주 기반 최적 이름 분석',prompt:u=>`사주명리 전문가. 아래 정보로 창업자에게 최적의 회사명 3가지를 추천해줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 시간:${u.hour||'모름'} 성별:${u.gender||'남'} 업종:${u.biz||''} 상호:${u.biz_name||''}\n각 회사명마다: 이름, 한자(있으면), 의미, 사주와의 궁합 점수(100점 만점), 추천 이유`},
+  {id:'logo',icon:'🎨',label:'로고 & 브랜드 색상',sub:'사주 오행 기반 컬러 추천',prompt:u=>`사주명리·브랜딩 전문가. 아래 창업자의 사주 오행을 분석해서 브랜드 컬러와 로고 방향을 추천해줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 시간:${u.hour||'모름'} 업종:${u.biz||''}\n① 사주 오행 분석 ② 길한 메인 컬러 3가지(HEX 포함) ③ 피해야 할 색상 ④ 로고 형태·서체 ⑤ 브랜드 무드`},
+  {id:'taegil',icon:'📅',label:'개업일 · 이사일 택일',sub:'길일 달력 분석',prompt:u=>`사주명리·택일 전문가. 아래 창업자의 사주를 분석해서 향후 3개월 내 개업·이사에 좋은 날짜를 알려줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 시간:${u.hour||'모름'} 업종:${u.biz||''} 오늘:${new Date().toLocaleDateString('ko-KR')}\n① 최길일 TOP 5(날짜·요일·이유) ② 피해야 할 날짜 3개 ③ 택일 시 주의사항`},
+  {id:'mbti',icon:'🧠',label:'MBTI 창업가 유형',sub:'사주로 보는 나의 사업 스타일',prompt:u=>`사주명리·심리학 전문가. 아래 창업자의 사주를 분석해서 MBTI 창업가 유형과 사업 스타일을 분석해줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 시간:${u.hour||'모름'} 업종:${u.biz||''}\n① MBTI 추정 유형 ② 강점 3가지 ③ 약점 2가지 ④ 이상적인 파트너 유형 ⑤ 사업 운영 스타일 조언`},
+  {id:'enn',icon:'🔢',label:'에니어그램 분석',sub:'9가지 성격의 창업 전략',prompt:u=>`에니어그램·창업 전문가. 아래 창업자의 정보로 에니어그램 유형을 분석하고 맞춤 창업 전략을 제시해줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 업종:${u.biz||''}\n① 추정 에니어그램 유형(번호·이름) ② 핵심 동기와 두려움 ③ 창업에 유리한 점 ④ 주의할 점 ⑤ 맞는 업종·사업 모델`},
+  {id:'tarot',icon:'🃏',label:'타로 창업 운세',sub:'과거·현재·미래 3카드',prompt:u=>`타로·창업 전문가. 아래 창업자를 위한 타로 3카드 리딩을 해줘. 반드시 한국어로, 희망적으로.\n이름:${u.name} 생년월일:${u.birth} 업종:${u.biz||''}\n① 과거 카드(제목·의미·창업 적용) ② 현재 카드(제목·의미·지금 해야 할 일) ③ 미래 카드(제목·의미·기대) ④ 종합 메시지`},
+  {id:'job',icon:'💼',label:'직업운 · 적합 업종',sub:'사주로 보는 나의 성공 업종',prompt:u=>`사주명리·직업운 전문가. 아래 창업자의 사주를 분석해서 직업운과 최적 업종을 추천해줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 시간:${u.hour||'모름'} 희망업종:${u.biz||''}\n① 직업운 총점(100점) ② 잘 맞는 업종 TOP 3(이유 포함) ③ 피해야 할 업종 ④ 성공 전성기 시기 ⑤ 지금 당장 해야 할 행동`},
+  {id:'daewoon',icon:'🌙',label:'명리 대운 흐름',sub:'10년 운세·최적 창업 타이밍',prompt:u=>`사주명리 전문가. 아래 창업자의 대운 흐름을 분석하고 창업 타이밍을 조언해줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 시간:${u.hour||'모름'} 성별:${u.gender||'남'} 업종:${u.biz||''}\n① 현재 대운 이름·기간·특징 ② 향후 10년 운세 흐름 ③ 창업 최적 타이밍 ④ 조심해야 할 시기 ⑤ 대운 활용 사업 전략`},
+  {id:'today',icon:'☀️',label:'오늘의 창업 운세',sub:'오늘 하루 길흉 분석',prompt:u=>`사주명리 전문가. 아래 창업자의 오늘(${new Date().toLocaleDateString('ko-KR')}) 운세를 분석해줘. 반드시 한국어로.\n이름:${u.name} 생년월일:${u.birth} 시간:${u.hour||'모름'} 업종:${u.biz||''}\n① 오늘의 종합운(★5점) ② 금전운 ③ 사업운 ④ 대인관계운 ⑤ 행운 색·숫자·방향 ⑥ 오늘 꼭 해야 할 일&피해야 할 일`},
+  {id:'bizplan',icon:'📋',label:'사업계획서 초안',sub:'AI가 작성해주는 창업 플랜',prompt:u=>`창업 컨설턴트. 아래 창업자의 정보로 간단한 사업계획서 초안을 작성해줘. 반드시 한국어로.\n이름:${u.name} 상호:${u.biz_name||''} 업종:${u.biz||''} 서비스:${u.service||''} 고객:${u.target||''} 강점:${u.strength||''} 주소:${u.address||''} 연락처:${u.contact||''} 가격:${u.price||''} 동기:${u.reason||''}\n① 사업 개요 ② 핵심 서비스 ③ 목표 고객 ④ 차별화 전략 ⑤ 수익 모델 ⑥ 마케팅 계획 ⑦ 6개월 실행 로드맵`},
+  {id:'homepage',icon:'🌐',label:'홈페이지 자동 생성',sub:'사업 소개 페이지 즉시 완성',isWeb:true,prompt:u=>`웹 디자이너 겸 카피라이터. 아래 창업자 정보로 사업 홈페이지용 콘텐츠를 작성해줘. 반드시 한국어로.\n이름:${u.name} 상호:${u.biz_name||''} 업종:${u.biz||''} 서비스:${u.service||''} 고객:${u.target||''} 강점:${u.strength||''} 주소:${u.address||''} 연락처:${u.contact||''} 가격:${u.price||''} 스토리:${u.reason||''} 후기:${u.review||''} CTA:${u.cta||''}\n① 메인 헤드라인(강렬하게) ② 서브 카피 ③ 핵심 서비스 3가지(제목+설명) ④ 대표 강점 3가지 ⑤ 고객 후기 2개 ⑥ CTA 문구 ⑦ About 소개 글(3줄)`},
+];
+const TM=[
+  {label:'창업 전 준비',num:'①',color:GOLD,items:[{t:'마음가짐 점검',d:'창업 동기·가족 동의·생활비 준비'},{t:'시장 조사',d:'경쟁사 분석·타겟 고객 파악'},{t:'법적·행정 준비',d:'사업자 등록·주소·인허가'},{t:'초기 자금 계획',d:'정부지원금·자본금·대출'},{t:'브랜드 기초 작업',d:'상호명·로고·SNS 개설'},{t:'사무 공간 확보',d:'비상주·공유·임차 비교'}]},
+  {label:'자신감 부스터',num:'②',color:'#D97706',items:[{t:'오늘의 창업 명언',d:'성공한 창업자들의 한 마디'},{t:'창업 확언 10가지',d:'매일 아침 읽는 자기 선언문'},{t:'용기 에너지 충전',d:'두려움을 이기는 심리 훈련법'},{t:'비전 보드 만들기',d:'1년·3년·5년 후 목표 시각화'}]},
+  {label:'두려움 극복',num:'③',color:RED,items:[{t:'돈이 없으면 못 한다',d:'정부지원·비상주사무실 활용법'},{t:'실패하면 어떡하지?',d:'실패를 경험 자산으로 바꾸는 법'},{t:'전문지식이 없다',d:'AI·파트너십으로 공백 메우기'},{t:'주변의 시선이 무섭다',d:'초지일관·결과로 증명하는 법'}]},
+  {label:'창업 체크리스트',num:'④',color:'#059669',type:'ck'},
+  {label:'창업 로드맵',num:'⑤',color:BLUE,type:'rm'},
+  {label:'성공 노하우',num:'⑥',color:'#7C3AED',items:[{t:'고객은 지인에서 나온다',d:'첫 10명 확보 전략'},{t:'현금흐름이 생명줄',d:'매출보다 이익을 먼저'},{t:'AI 도구를 모르면 뒤처진다',d:'실전 AI 마케팅 활용'},{t:'작은 실행이 큰 결과',d:'적소성대(積小成大) 실천법'}]},
+  {label:'사업 네트워크',num:'⑦',color:'#0891B2',items:[{t:'세명장교 비즈니스센터',d:'📞 02-762-3009 · 비상주·컨설팅·AI교육'},{t:'고용노동부(한 건물)',d:'노무·고용지원 상담'},{t:'정부 창업 지원기관',d:'창업진흥원·소진공·중기부'},{t:'AI 마케터 Zone',d:'AI 마케팅 커뮤니티·교육'}]},
+];
+const CK_D=[['📋 마음 준비',['창업 동기 명확히','가족과 상의 완료','6개월 생활비 확보']],['💡 아이디어',['아이디어 3가지 도출','타겟 고객 10명 의견','경쟁사 3곳 분석']],['📝 법적 준비',['사업 형태 결정','사업자 주소 확보','사업자 등록 신청']],['🚀 마케팅',['SNS 채널 개설','첫 고객 확보 계획','AI 마케팅 도구 활용']]];
+const RM_D=['창업 동기 확인','아이디어 발굴','시장 규모 파악','경쟁사 분석','고객 인터뷰','MVP 설계','수익 모델','초기 비용 산출','자금 조달','사업자 주소','사업자 등록','브랜드 네이밍','로고·명함','SNS·홈페이지','첫 콘텐츠','첫 고객 확보','서비스 개선','첫 매출 달성','반복·자동화','성장·확장'];
+const IQ=[
+  {key:'name',hint:'대표자 성함을 입력해 주세요…',q:()=>`반갑습니다! 😊 저는 <strong>홈페이지를 만들어 드리는 AI</strong>입니다.<br><br>홈페이지 완성을 위해 <strong>13가지 질문</strong>을 드릴게요!<br><br><span style="color:${GOLD};font-weight:700">고개 1/13</span> — 먼저 <strong>대표자 성함</strong>을 알려주세요.<br><span style="font-size:11px;color:${MUTED}">예) 홍길동</span>`},
+  {key:'biz_name',hint:'상호명을 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 2/13</span> — <strong>상호명 또는 브랜드명</strong>은 무엇인가요?<br><span style="font-size:11px;color:${MUTED}">예) 세명장교 비즈니스센터 / 홍길동 컨설팅</span>`},
+  {key:'biz',hint:'업종·서비스 분야를 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 3/13</span> — <strong>업종 또는 서비스 분야</strong>가 무엇인가요?<br><span style="font-size:11px;color:${MUTED}">예) 비즈니스센터 운영 / IT 컨설팅 / 온라인 쇼핑몰</span>`},
+  {key:'service',hint:'핵심 서비스 3가지를 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 4/13</span> — <strong>대표 서비스나 상품</strong> 3가지를 알려주세요.<br><span style="font-size:11px;color:${MUTED}">예) 비상주사무실 임대 / AI 창업컨설팅 / 판촉물 제작</span>`},
+  {key:'target',hint:'주요 고객층을 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 5/13</span> — <strong>주요 고객층</strong>은 누구인가요?<br><span style="font-size:11px;color:${MUTED}">예) 1인 창업자 / 30~50대 직장인 / 소상공인</span>`},
+  {key:'strength',hint:'강점·차별점을 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 6/13</span> — <strong>우리만의 강점·차별점</strong>은 무엇인가요?<br><span style="font-size:11px;color:${MUTED}">예) 25년 보험금융 경력 / 고용노동부 한 건물 / AI 자동화</span>`},
+  {key:'address',hint:'사업장 주소나 지역을 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 7/13</span> — <strong>사업장 주소 또는 서비스 지역</strong>을 알려주세요.<br><span style="font-size:11px;color:${MUTED}">예) 서울 중구 삼일대로 363 장교빌딩 810호</span>`},
+  {key:'contact',hint:'연락처를 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 8/13</span> — 고객이 연락할 수 있는 <strong>연락처</strong>를 알려주세요.<br><span style="font-size:11px;color:${MUTED}">예) 02-762-3009 / kakao: semyung</span>`},
+  {key:'price',hint:'대표 요금·가격 정보를 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 9/13</span> — <strong>대표 요금이나 가격</strong>이 있다면 알려주세요.<br><span style="font-size:11px;color:${MUTED}">예) 비상주사무실 월 10만원부터 / 무료상담 후 견적</span>`},
+  {key:'reason',hint:'창업 계기나 스토리를 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 10/13</span> — 창업하게 된 <strong>계기나 대표 스토리</strong>를 들려주세요.<br><span style="font-size:11px;color:${MUTED}">예) 25년 삼성생명 경력 후 창업자들을 돕고 싶어서...</span>`},
+  {key:'review',hint:'고객 후기나 성공 사례를 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 11/13</span> — 실제 <strong>고객 후기나 성공 사례</strong>가 있다면 알려주세요.<br>없으면 "없음"이라고 입력해도 AI가 샘플을 만들어 드려요!<br><span style="font-size:11px;color:${MUTED}">예) "덕분에 사업자 등록 쉽게 했어요" — 김○○ 대표</span>`},
+  {key:'cta',hint:'방문자에게 원하는 행동(CTA)을 입력해 주세요…',q:d=>`<span style="color:${GOLD};font-weight:700">고개 12/13</span> — 방문자가 <strong>가장 먼저 해주길 바라는 행동</strong>은 무엇인가요?<br><span style="font-size:11px;color:${MUTED}">예) 전화 상담 / 카카오톡 문의 / 무료 견적 신청</span>`},
+  {key:'birth',hint:'대표자 생년월일을 입력해 주세요… (예: 1963-11-15)',q:d=>`<span style="color:${GOLD};font-weight:700">고개 13/13</span> — 마지막입니다! 🎉<br><br>사주 분석으로 홈페이지에 <strong>행운의 색상·문구·개업일</strong>까지 넣어드릴게요.<br><strong>대표자 생년월일</strong>을 알려주세요.<br><span style="font-size:11px;color:${MUTED}">예) 1963-11-15 (양력)</span>`},
+];
+let phase='welcome',iqStep=0,iqData={},userData=null,isBusy=false,pendingMenu=null,activeMid=null,ckArr=Array(12).fill(false),openTM=-1;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function init(){
+  const wt=document.getElementById('wl-tags');
+  SB_MENUS.forEach(m=>{const s=document.createElement('span');s.className='wl-tag';s.textContent=m.icon+' '+m.label;wt.appendChild(s);});
+  const sb=document.getElementById('sb-menus');
+  SB_MENUS.forEach(m=>{const d=document.createElement('div');d.className='sb-mi';d.id='sbm-'+m.id;d.innerHTML=`<span class="sb-icon">${m.icon}</span><div><div class="sb-label">${m.label}</div><div class="sb-slabel">${m.sub}</div></div>`;d.onclick=()=>sbClick(m);sb.appendChild(d);});
+  const tnm=document.getElementById('tn-menus');
+  TM.forEach((m,i)=>{const d=document.createElement('div');d.className='tn-item';d.id='tnm-'+i;d.innerHTML=`<span style="color:${m.color}">${m.num}</span>${m.label}<span style="font-size:8px;opacity:.5;margin-left:2px">▾</span>`;d.onclick=()=>toggleTM(i,m);tnm.appendChild(d);});
+}
+function toggleTM(i,m){
+  const dd=document.getElementById('dd');
+  if(openTM===i){dd.classList.remove('show');openTM=-1;document.querySelectorAll('.tn-item').forEach(e=>e.classList.remove('on'));return;}
+  openTM=i;document.querySelectorAll('.tn-item').forEach((e,j)=>e.classList.toggle('on',j===i));
+  dd.style.borderBottomColor=m.color;
+  let h=`<div class="dd-hd"><div class="dd-badge" style="background:${m.color}">${m.num}</div>${m.label}</div>`;
+  if(m.type==='ck'){h+=`<div class="dd-ck">`;CK_D.forEach(([g,list],gi)=>{h+=`<div><div class="ck-gt">${g}</div>`;list.forEach((it,ii)=>{const idx=gi*3+ii;h+=`<div class="ck-i${ckArr[idx]?' done':''}" onclick="toggleCk(${idx},this)"><div class="ck-cb">${ckArr[idx]?'✓':''}</div><span>${it}</span></div>`;});h+=`</div>`;});const done=ckArr.filter(Boolean).length;h+=`<div class="ck-prog"><div style="display:flex;justify-content:space-between;font-size:9px;color:${MUTED};margin-bottom:4px"><span>진행률</span><span>${done}/12</span></div><div style="height:4px;background:#E8E0CE;border-radius:2px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,${GOLD},${RED});width:${Math.round(done/12*100)}%;transition:width .4s"></div></div></div></div>`;}
+  else if(m.type==='rm'){h+=`<div class="dd-rm">`;RM_D.forEach((s,i)=>h+=`<div class="dd-rmi"><div class="dd-rmn" style="background:${m.color}">${i+1}</div><span>${s}</span></div>`);h+=`</div>`;}
+  else if(m.items){const cols=Math.min(m.items.length,4);h+=`<div class="dd-grid" style="grid-template-columns:repeat(${cols},1fr)">`;m.items.forEach(it=>h+=`<div class="dd-card" style="border-top:2px solid ${m.color}"><div class="dd-ct">${it.t}</div><div class="dd-cd">${it.d}</div></div>`);h+=`</div>`;}
+  dd.innerHTML=h;dd.classList.add('show');
+}
+function toggleCk(idx,el){ckArr[idx]=!ckArr[idx];el.classList.toggle('done',ckArr[idx]);el.querySelector('.ck-cb').textContent=ckArr[idx]?'✓':'';if(openTM>=0)toggleTM(openTM,TM[openTM]);}
+document.addEventListener('click',e=>{if(openTM>=0&&!document.getElementById('topnav').contains(e.target)){document.getElementById('dd').classList.remove('show');openTM=-1;document.querySelectorAll('.tn-item').forEach(e=>e.classList.remove('on'));}});
+function resetHome(){phase='welcome';iqStep=0;iqData={};userData=null;isBusy=false;activeMid=null;pendingMenu=null;document.getElementById('chat-body').innerHTML='';document.getElementById('welcome').style.display='flex';document.getElementById('chat-wrap').style.display='none';document.getElementById('sb-saved').style.display='none';document.querySelectorAll('.sb-mi').forEach(e=>e.classList.remove('on'));['res-ov','mf-ov','ld-ov'].forEach(id=>document.getElementById(id).classList.remove('show'));}
+async function startChat(){document.getElementById('welcome').style.display='none';document.getElementById('chat-wrap').style.display='flex';phase='chat';showTyping();await sleep(600);hideTyping();addMsg('ai',`안녕하세요! 👋 <strong>운명창업 AI 플랫폼</strong>에 오신 것을 환영합니다!<br><br>사주명리·작명·타로·MBTI 분석은 물론<br><strong style="color:${GOLD}">맞춤형 사업 홈페이지</strong>까지 만들어 드리는 AI 창업 코치입니다.<br><br>아래 입력창에 <strong style="color:${GOLD}">「사업하자」</strong> 라고 입력해 주세요! ✨`);setHint('「사업하자」라고 입력해 주세요','「사업하자」라고 입력해 보세요…');}
+async function send(){
+  const inp=document.getElementById('ci');const txt=inp.value.trim();if(!txt||isBusy)return;
+  inp.value='';inp.style.height='22px';isBusy=true;setDis(true);
+  if(phase==='chat'){addMsg('user',txt);if(txt.replace(/\s/g,'').match(/사업하자|사업|창업/)){showTyping();await sleep(500);hideTyping();addMsg('ai',`🎊 <strong>축하합니다! 성공의 문을 두드리셨습니다!</strong><br><br><div style="background:linear-gradient(135deg,#1A1400,#0C0900);border:1px solid ${GOLD};border-radius:11px;padding:14px 18px;margin:5px 0"><div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;color:${GOLD2};margin-bottom:6px">✦ 적소성대(積小成大) ✦</div><div style="font-size:12px;line-height:1.9;color:#C8B880">작은 용기 하나가 큰 사업을 만들어 갑니다!</div></div><br>저는 <strong>세명장교 비즈니스센터 AI 창업 코치</strong>입니다.<br>지금부터 <strong style="color:${GOLD}">홈페이지 완성을 위한 13고개</strong>를 시작할게요! 🌐`);await sleep(800);showTyping();await sleep(600);hideTyping();addMsg('ai',IQ[0].q({}));phase='intro';iqStep=0;setHint(`고개 1/${IQ.length} — ${IQ[0].hint}`,IQ[0].hint);}else{showTyping();await sleep(500);hideTyping();addMsg('ai',`😊 시작을 위해 <strong style="color:${GOLD}">「사업하자」</strong> 라고 입력해 주세요!`);}isBusy=false;setDis(false);return;}
+  if(phase==='intro'){addMsg('user',txt);const key=IQ[iqStep].key;const nd={...iqData,[key]:txt};iqData=nd;const next=iqStep+1;if(next<IQ.length){iqStep=next;showTyping();await sleep(700);hideTyping();addMsg('ai',IQ[next].q(nd));setHint(`고개 ${next+1}/${IQ.length} — ${IQ[next].hint}`,IQ[next].hint);}else{userData={...nd};showTyping();await sleep(900);hideTyping();addMsg('ai',`🎉 <strong>13고개 완료! ${nd.name}님, 정말 수고하셨습니다!</strong><br><br><div style="background:linear-gradient(135deg,#0A1400,#0C0A00);border:1px solid ${GOLD};border-radius:11px;padding:14px 18px;font-size:12px;line-height:2.1;color:#E8DEC8">👤 <strong style="color:${GOLD}">대표자:</strong> ${nd.name}<br>🏢 <strong style="color:${GOLD}">상호명:</strong> ${nd.biz_name||'-'}<br>💼 <strong style="color:${GOLD}">업종:</strong> ${nd.biz||'-'}<br>🎯 <strong style="color:${GOLD}">핵심 서비스:</strong> ${nd.service||'-'}<br>👥 <strong style="color:${GOLD}">주요 고객:</strong> ${nd.target||'-'}<br>📍 <strong style="color:${GOLD}">주소:</strong> ${nd.address||'-'}</div><br>이제 <strong style="color:${GOLD}">왼쪽 사이드바 🌐 홈페이지 자동 생성</strong>을 클릭하면<br>입력하신 정보로 <strong>맞춤 홈페이지 콘텐츠</strong>가 완성됩니다! ✨`);const sv=document.getElementById('sb-saved');sv.style.display='block';sv.textContent='✓ '+nd.name+'님 정보 저장됨';phase='ready';setHint('왼쪽 메뉴 클릭 또는 자유 질문 입력','추가 궁금한 점을 입력하세요…');}isBusy=false;setDis(false);return;}
+  if(phase==='ready'){addMsg('user',txt);showTyping();await sleep(800);hideTyping();addMsg('ai',`왼쪽 사이드바 메뉴를 클릭하시면 <strong>${userData?.name||''}님</strong>의 정보로 맞춤 AI 분석을 바로 받으실 수 있어요! 🔮<br><br>추가 문의: <strong style="color:${GOLD}">📞 02-762-3009</strong>`);isBusy=false;setDis(false);}
+}
+function sbClick(menu){document.querySelectorAll('.sb-mi').forEach(e=>e.classList.remove('on'));document.getElementById('sbm-'+menu.id).classList.add('on');activeMid=menu.id;if(userData?.name&&userData?.birth){runAI(menu,userData);}else{pendingMenu=menu;const sv=userData||iqData;document.getElementById('mf-name').value=sv?.name||'';document.getElementById('mf-birth').value=sv?.birth||'';document.getElementById('mf-hour').value=sv?.hour||'모름';document.getElementById('mf-icon').textContent=menu.icon;document.getElementById('mf-title').textContent=menu.label;document.getElementById('mf-ov').classList.add('show');}}
+function submitMF(){const name=document.getElementById('mf-name').value.trim();const birth=document.getElementById('mf-birth').value.trim();if(!name||!birth){alert('성명과 생년월일은 필수입니다.');return;}const u={...(userData||{}),...iqData,name,birth,hour:document.getElementById('mf-hour').value||'모름',gender:document.getElementById('mf-gender').value||'남',biz:userData?.biz||iqData?.biz||'창업'};document.getElementById('mf-ov').classList.remove('show');runAI(pendingMenu,u);}
+async function runAI(menu,u){userData={...(userData||{}),...u};document.getElementById('ld-ov').classList.add('show');document.getElementById('ld-s').textContent=`${u.name}님의 정보로 AI가 분석 중입니다`;if(phase!=='welcome')addMsg('ai',`<strong>${menu.icon} ${menu.label}</strong> 분석을 시작합니다…`);let result='';try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:menu.prompt(u)}]})});const data=await res.json();result=data.content?.[0]?.text||'';}catch(e){result=`분석 중 오류가 발생했습니다.\n📞 02-762-3009`;}document.getElementById('ld-ov').classList.remove('show');showResult(menu,result);}
+function showResult(menu,text){document.getElementById('res-icon').textContent=menu.icon;document.getElementById('res-title').textContent=menu.label;document.getElementById('res-sub').textContent=menu.sub;document.getElementById('res-body').textContent=text;const ft=document.getElementById('res-ft');if(menu.isWeb){ft.innerHTML=`<button class="res-web" onclick="openHP(this)" data-c="${encodeURIComponent(text)}">🌐 홈페이지 미리보기 새 탭으로 열기</button>`;}else{ft.innerHTML='';}document.getElementById('res-ov').classList.add('show');}
+function openHP(btn){const c=decodeURIComponent(btn.getAttribute('data-c'));const w=window.open('','_blank');w.document.write(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>${userData?.biz_name||'사업 홈페이지'}</title><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Noto Sans KR',sans-serif;background:#F8F4ED;color:#2A2218}.hero{background:linear-gradient(135deg,#0C0A08,#1A1208);color:#E8DEC8;padding:80px 40px;text-align:center}.hero h1{font-family:'Noto Serif KR',serif;font-size:clamp(26px,5vw,48px);font-weight:900;color:#D4A017;margin-bottom:16px;line-height:1.3}.hero p{font-size:17px;color:#C0B090;max-width:580px;margin:0 auto 30px}.cta{display:inline-block;background:linear-gradient(135deg,#B8860B,#7A5C00);color:#fff;padding:14px 36px;border-radius:28px;font-size:15px;font-weight:700;text-decoration:none}.sec{padding:56px 40px;max-width:860px;margin:0 auto}.sec-t{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:700;color:#0C0A08;margin-bottom:28px;text-align:center}pre{white-space:pre-wrap;font-family:'Noto Sans KR',sans-serif;font-size:13px;line-height:2;background:#F2EDE3;padding:20px;border-radius:8px;border:1px solid #D4C9B0}footer{background:#0C0A08;color:#9A8A6A;padding:28px 40px;text-align:center;font-size:12px}footer a{color:#D4A017;text-decoration:none}</style></head><body><div class="hero"><h1>🌟 ${userData?.biz_name||'사업의 꿈을 현실로'}</h1><p>AI와 사주가 분석한 나만의 맞춤 창업 전략</p><a href="tel:${userData?.contact||'02-762-3009'}" class="cta">📞 ${userData?.contact||'02-762-3009'} 상담하기</a></div><div class="sec"><h2 class="sec-t">AI 생성 홈페이지 콘텐츠</h2><pre>${c}</pre></div><footer>세명장교 비즈니스센터 · 서울 중구 삼일대로 363, 장교빌딩 810호<br><a href="tel:02-762-3009">📞 02-762-3009</a></footer></body></html>`);}
+function addMsg(role,html){const cb=document.getElementById('chat-body');const d=document.createElement('div');d.className='msg '+role;const av=`<div class="av ${role==='ai'?'ai':'usr'}">${role==='ai'?'運':'👤'}</div>`;const bbl=`<div class="bubble">${html}</div>`;d.innerHTML=role==='ai'?av+bbl:bbl+av;cb.appendChild(d);setTimeout(()=>cb.scrollTop=cb.scrollHeight,50);}
+let typEl=null;
+function showTyping(){const cb=document.getElementById('chat-body');const w=document.createElement('div');w.className='typing-wrap';w.id='typ';w.innerHTML=`<div class="av ai">運</div><div class="t-dots"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;cb.appendChild(w);setTimeout(()=>cb.scrollTop=cb.scrollHeight,50);typEl=w;}
+function hideTyping(){if(typEl&&typEl.parentNode)typEl.parentNode.removeChild(typEl);typEl=null;}
+function setHint(label,ph){document.getElementById('iz-hint').textContent=label;document.getElementById('ci').placeholder=ph||'';}
+function setDis(v){document.getElementById('ci').disabled=v;document.getElementById('sbtn').disabled=v;}
+function autoR(ta){ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,88)+'px';}
+init();
+</script>
+</body>
+</html>
