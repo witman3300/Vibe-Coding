@@ -245,6 +245,31 @@ html,body{height:100%;font-family:'Noto Sans KR',sans-serif;background:var(--pap
   <div class="ld-t">AI가 분석 중입니다…</div>
   <div class="ld-s" id="ld-s">사주와 정보를 기반으로 결과를 생성하고 있습니다</div>
 </div>
+
+<div id="apikey-bar" style="position:fixed;bottom:0;left:0;right:0;background:#1A1208;border-top:2px solid #B8860B;padding:10px 20px;display:flex;align-items:center;gap:10px;z-index:500;font-family:'Noto Sans KR',sans-serif;">
+  <span style="color:#D4A017;font-size:12px;font-weight:700;white-space:nowrap;">🔑 API 키:</span>
+  <input id="api-key-input" type="password" placeholder="sk-ant-... (Anthropic API 키 입력)" 
+    style="flex:1;padding:7px 12px;border:1.5px solid #B8860B;border-radius:20px;background:#0C0A08;color:#E8DEC8;font-size:12px;outline:none;font-family:'Noto Sans KR',sans-serif;">
+  <button onclick="saveApiKey()" style="padding:7px 16px;background:linear-gradient(135deg,#B8860B,#7A5C00);border:none;border-radius:20px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">저장</button>
+  <button onclick="document.getElementById('apikey-bar').style.display='none'" style="padding:7px 12px;background:transparent;border:1px solid #3A3020;border-radius:20px;color:#9A8A6A;font-size:11px;cursor:pointer;">닫기</button>
+</div>
+<script>
+function saveApiKey(){
+  const key = document.getElementById('api-key-input').value.trim();
+  if(!key.startsWith('sk-ant')){alert('올바른 API 키를 입력해 주세요.\n(sk-ant- 로 시작해야 합니다)');return;}
+  window.ANTHROPIC_KEY = key;
+  sessionStorage.setItem('AKEY', key);
+  document.getElementById('apikey-bar').style.display='none';
+  addMsg && addMsg('ai','✅ <strong>API 키가 저장됐습니다!</strong><br>이제 왼쪽 사이드바 메뉴를 클릭해서 분석을 시작하세요! 🎉');
+}
+window.ANTHROPIC_KEY = sessionStorage.getItem('AKEY') || '';
+window.addEventListener('load', function(){
+  if(window.ANTHROPIC_KEY){
+    const bar = document.getElementById('apikey-bar');
+    if(bar) bar.style.display='none';
+  }
+});
+</script>
 <script>
 const GOLD='#B8860B',GOLD2='#D4A017',P2='#F2EDE3',BD='#D4C9B0',MUTED='#7A6A50',RED='#8B1A1A',BLUE='#1A3A5C';
 const SB_MENUS=[
@@ -320,7 +345,44 @@ async function send(){
 }
 function sbClick(menu){document.querySelectorAll('.sb-mi').forEach(e=>e.classList.remove('on'));document.getElementById('sbm-'+menu.id).classList.add('on');activeMid=menu.id;if(userData?.name&&userData?.birth){runAI(menu,userData);}else{pendingMenu=menu;const sv=userData||iqData;document.getElementById('mf-name').value=sv?.name||'';document.getElementById('mf-birth').value=sv?.birth||'';document.getElementById('mf-hour').value=sv?.hour||'모름';document.getElementById('mf-icon').textContent=menu.icon;document.getElementById('mf-title').textContent=menu.label;document.getElementById('mf-ov').classList.add('show');}}
 function submitMF(){const name=document.getElementById('mf-name').value.trim();const birth=document.getElementById('mf-birth').value.trim();if(!name||!birth){alert('성명과 생년월일은 필수입니다.');return;}const u={...(userData||{}),...iqData,name,birth,hour:document.getElementById('mf-hour').value||'모름',gender:document.getElementById('mf-gender').value||'남',biz:userData?.biz||iqData?.biz||'창업'};document.getElementById('mf-ov').classList.remove('show');runAI(pendingMenu,u);}
-async function runAI(menu,u){userData={...(userData||{}),...u};document.getElementById('ld-ov').classList.add('show');document.getElementById('ld-s').textContent=`${u.name}님의 정보로 AI가 분석 중입니다`;if(phase!=='welcome')addMsg('ai',`<strong>${menu.icon} ${menu.label}</strong> 분석을 시작합니다…`);let result='';try{const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:menu.prompt(u)}]})});const data=await res.json();result=data.content?.[0]?.text||'';}catch(e){result=`분석 중 오류가 발생했습니다.\n📞 02-762-3009`;}document.getElementById('ld-ov').classList.remove('show');showResult(menu,result);}
+async function runAI(menu,u){
+  userData={...(userData||{}),...u};
+  document.getElementById('ld-ov').classList.add('show');
+  document.getElementById('ld-s').textContent=u.name+'님의 정보로 AI가 분석 중입니다';
+  if(phase!=='welcome') addMsg('ai','<strong>'+menu.icon+' '+menu.label+'</strong> 분석을 시작합니다…');
+  let result='';
+  try{
+    const API_KEY = window.ANTHROPIC_KEY || sessionStorage.getItem('AKEY') || '';
+    if(!API_KEY){
+      document.getElementById('ld-ov').classList.remove('show');
+      document.getElementById('apikey-bar').style.display='flex';
+      addMsg('ai','⚠️ <strong>API 키를 먼저 입력해 주세요!</strong><br>화면 하단 입력창에 <strong>sk-ant-...</strong> 키를 입력하고 저장 버튼을 누르세요.');
+      return;
+    }
+    const proxyUrl = 'https://api.anthropic.com/v1/messages';
+    const res = await fetch(proxyUrl,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:menu.prompt(u)}]
+      })
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
+    result = data.content?.[0]?.text || '결과를 가져오지 못했습니다.';
+  }catch(e){
+    result = '오류: '+e.message+'\n\n💡 해결방법:\n1. API 키가 올바른지 확인\n2. Vercel 배포 버전을 사용하세요\n📞 02-762-3009';
+  }
+  document.getElementById('ld-ov').classList.remove('show');
+  showResult(menu,result);
+}
 function showResult(menu,text){document.getElementById('res-icon').textContent=menu.icon;document.getElementById('res-title').textContent=menu.label;document.getElementById('res-sub').textContent=menu.sub;document.getElementById('res-body').textContent=text;const ft=document.getElementById('res-ft');if(menu.isWeb){ft.innerHTML=`<button class="res-web" onclick="openHP(this)" data-c="${encodeURIComponent(text)}">🌐 홈페이지 미리보기 새 탭으로 열기</button>`;}else{ft.innerHTML='';}document.getElementById('res-ov').classList.add('show');}
 function openHP(btn){const c=decodeURIComponent(btn.getAttribute('data-c'));const w=window.open('','_blank');w.document.write(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>${userData?.biz_name||'사업 홈페이지'}</title><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Noto Sans KR',sans-serif;background:#F8F4ED;color:#2A2218}.hero{background:linear-gradient(135deg,#0C0A08,#1A1208);color:#E8DEC8;padding:80px 40px;text-align:center}.hero h1{font-family:'Noto Serif KR',serif;font-size:clamp(26px,5vw,48px);font-weight:900;color:#D4A017;margin-bottom:16px;line-height:1.3}.hero p{font-size:17px;color:#C0B090;max-width:580px;margin:0 auto 30px}.cta{display:inline-block;background:linear-gradient(135deg,#B8860B,#7A5C00);color:#fff;padding:14px 36px;border-radius:28px;font-size:15px;font-weight:700;text-decoration:none}.sec{padding:56px 40px;max-width:860px;margin:0 auto}.sec-t{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:700;color:#0C0A08;margin-bottom:28px;text-align:center}pre{white-space:pre-wrap;font-family:'Noto Sans KR',sans-serif;font-size:13px;line-height:2;background:#F2EDE3;padding:20px;border-radius:8px;border:1px solid #D4C9B0}footer{background:#0C0A08;color:#9A8A6A;padding:28px 40px;text-align:center;font-size:12px}footer a{color:#D4A017;text-decoration:none}</style></head><body><div class="hero"><h1>🌟 ${userData?.biz_name||'사업의 꿈을 현실로'}</h1><p>AI와 사주가 분석한 나만의 맞춤 창업 전략</p><a href="tel:${userData?.contact||'02-762-3009'}" class="cta">📞 ${userData?.contact||'02-762-3009'} 상담하기</a></div><div class="sec"><h2 class="sec-t">AI 생성 홈페이지 콘텐츠</h2><pre>${c}</pre></div><footer>세명장교 비즈니스센터 · 서울 중구 삼일대로 363, 장교빌딩 810호<br><a href="tel:02-762-3009">📞 02-762-3009</a></footer></body></html>`);}
 function addMsg(role,html){const cb=document.getElementById('chat-body');const d=document.createElement('div');d.className='msg '+role;const av=`<div class="av ${role==='ai'?'ai':'usr'}">${role==='ai'?'運':'👤'}</div>`;const bbl=`<div class="bubble">${html}</div>`;d.innerHTML=role==='ai'?av+bbl:bbl+av;cb.appendChild(d);setTimeout(()=>cb.scrollTop=cb.scrollHeight,50);}
@@ -334,4 +396,3 @@ init();
 </script>
 </body>
 </html>
-설명
